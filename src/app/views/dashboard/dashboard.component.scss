@@ -1,0 +1,101 @@
+.indicadores {
+    background: #F2F2F2;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 22px;
+}
+
+.resultados {
+    background: #FFFFFF;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0 22px 22px 0;
+}
+
+.tituloResultados {
+    font-family: Roboto-Semibold;
+    color: #1F3569;
+    span {
+        font-size: 1.1em;
+    }
+}
+
+.gauge {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.indicadoresDivs {
+    text-align: center;
+    font-family: Roboto-Regular;
+    font-size: 1em;
+    background: #FFFFFF;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    .divisionDivs {
+        border-radius: 8px;
+        border: 1px dashed #C8C8C7;
+    }
+    img {
+        margin: 0 auto;
+        width: 50%;
+    }
+}
+
+.division {
+    z-index: 2 !important;
+    font-size: 0.8em;
+    line-height: 1em;
+    font-family: Roboto-Semibold;
+    color: #1F3569;
+    text-align: center;
+    margin-top: 10px;
+    border-bottom: 2px dashed #1F3569;
+}
+
+.fa-bar-chart {
+    font-size: 1em !important;
+}
+
+.fa-circle {
+    color: #617E41;
+    font-size: 0.7em;
+}
+
+.costoOportunidad {
+    color: #EF872F;
+    font-family: Roboto-Semibold;
+    background: #F2F2F2;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0 0 8px 8px;
+    font-size: 0.8em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 5%;
+    margin-top: -50px;
+    margin-bottom: 10px;
+    z-index: -9;
+    position: absolute;
+    left: 14vw;
+    svg {
+        color: #EF872F;
+        font-size: 0.7em;
+    }
+}
+
+@media (max-width:820px) {
+    .indicadores {
+        margin: 0;
+        width: 84%;
+    }
+    .indicadoresDivs {
+        img {
+            margin: 0 auto;
+            width: 20%;
+        }
+    }
+    .resultados {
+        width: 83%;
+    }
+    .gauge {
+        width: 90%;
+    }
+}
