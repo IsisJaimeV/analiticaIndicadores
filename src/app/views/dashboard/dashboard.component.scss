@@ -8,6 +8,7 @@
     background: #FFFFFF;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 0 22px 22px 0;
+    margin-left: 40px !important;
 }
 
 .tituloResultados {
@@ -399,5 +400,91 @@ input:checked+.slider:before {
     }
     .gauge {
         width: 90%;
+    }
+}
+
+@media (max-width:540px) {
+    .resultados {
+        margin-left: 20px;
+    }
+    .utilidadOperativa {
+        margin-right: -170px !important;
+        font-size: 0.6em !important;
+        span {
+            color: white !important;
+        }
+    }
+    .gastosVenta {
+        margin-top: 35px !important;
+        margin-right: -65px !important;
+        font-size: 0.6em !important;
+        span {
+            color: white !important;
+        }
+    }
+    .gastosCryogénico {
+        margin-left: -100px !important;
+        margin-top: 30px !important;
+        font-size: 0.8em !important;
+        font-size: 0.6em !important;
+        span {
+            color: white !important;
+        }
+    }
+    .costosVenta {
+        font-size: 0.8em !important;
+        margin-left: -200px !important;
+        span {
+            color: white !important;
+        }
+    }
+    .costoOportunidad {
+        span {
+            font-size: 0.6em !important;
+        }
+    }
+}
+
+@media (max-width:380px) {
+    .utilidadOperativa {
+        margin-right: -170px !important;
+        font-size: 0.8em !important;
+        span {
+            color: white !important;
+        }
+    }
+    .gastosVentaValor,
+    .gastosCryogénicoValor,
+    .costosVentaValor {
+        font-size: 0.9em !important;
+    }
+    .gastosVenta {
+        margin-top: 55px !important;
+        margin-right: -55px !important;
+        font-size: 0.8em !important;
+        span {
+            color: white !important;
+        }
+    }
+    .gastosCryogénico {
+        margin-left: -110px !important;
+        margin-top: 40px !important;
+        font-size: 0.8em !important;
+        font-size: 0.8em !important;
+        span {
+            color: white !important;
+        }
+    }
+    .costosVenta {
+        font-size: 0.8em !important;
+        margin-left: -220px !important;
+        span {
+            color: white !important;
+        }
+    }
+    .costoOportunidad {
+        span {
+            font-size: 0.6em !important;
+        }
     }
 }
