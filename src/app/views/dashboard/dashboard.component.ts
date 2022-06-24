@@ -42,6 +42,11 @@ export class DashboardComponent implements OnInit {
   //DIFERENCIA PARTE INFERIOR
   costoVariable: string = '-';
 
+  //NG MODEL
+  selectedCodigoSpan: string = '';
+  selectedDescripcionSpan: string = '';
+  selectedUMSpan: string = '';
+  child: boolean = false;
 
   //FORM
   filterForm = new FormGroup({
@@ -53,6 +58,7 @@ export class DashboardComponent implements OnInit {
     tipoOperacion: new FormControl(false, Validators.nullValidator),
   })
 
+  mymodel:any;
   constructor(private precioPiso: PrecioPisoDAOService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
@@ -60,25 +66,90 @@ export class DashboardComponent implements OnInit {
     this.selectZona();
   }
 
+  validaVacios() {
+    (document.getElementById('simulacion') as HTMLButtonElement).disabled = true;
+
+    var linea = (document.getElementById("linea") as HTMLInputElement).value.length;
+    var codigo = (document.getElementById("codigo") as HTMLInputElement).value.length;
+    var volumen = (document.getElementById("volumen") as HTMLInputElement).value.length;
+    var zona = (document.getElementById("zona") as HTMLInputElement).value.length;
+
+    if (linea != 0 && codigo != 0 && volumen != 0 && zona != 0) {
+      (document.getElementById('simulacion') as HTMLButtonElement).disabled = false;
+    } else {
+      (document.getElementById('simulacion') as HTMLButtonElement).disabled = true;
+    }
+  }
+
   selectLinea() {
     this.precioPiso.getLinea().subscribe(res => {
       this.linea = res;
-
     });
+    (document.getElementById("linea") as HTMLInputElement).value = "";
+    (document.getElementById("codigo") as HTMLInputElement).value = "";
+    (document.getElementById("volumen") as HTMLInputElement).value = "";
+    (document.getElementById("zona") as HTMLInputElement).value = "";
+    this.validaVacios();
   }
 
   selectCodigo(event: any) {
     let value = event.target.value;
-    console.log(value)
+    (document.getElementById("codigo") as HTMLSelectElement).disabled = true;
+    (document.getElementById("codigo") as HTMLSelectElement).style.backgroundColor = "#c0c0c0";
     this.precioPiso.getCodigo(value).subscribe(res => {
       this.codigo = res;
+      (document.getElementById("codigo") as HTMLSelectElement).disabled = false;
+      (document.getElementById("codigo") as HTMLSelectElement).style.backgroundColor = "#F2F2F2";
     });
+
+    //Limpiar campos 
+    (document.getElementById("codigo") as HTMLInputElement).value = "";
+    (document.getElementById("zona") as HTMLInputElement).value = "";
+    (document.getElementById("precioPropuesto") as HTMLInputElement).value = "";
+    (document.getElementById("volumen") as HTMLInputElement).value = "";
+    (document.getElementById('cryoinfra') as HTMLInputElement).checked = false;
+
+    (document.getElementById('utilidadNetaText') as HTMLDivElement).style.color = "#1e1d1d";
+    (document.getElementById('difPrePropuestoVSPrePiso') as HTMLDivElement).style.color = "#1e1d1d";
+
+    this.selectedUMSpan = "";
+    this.selectedCodigoSpan = "";
+    this.selectedDescripcionSpan = "";
+
+    this.validaVacios();
+    this.limpiarCampos()
+  }
+
+  selectedCodigo(event: any) {
+    let value = event.target.value;
+
+    var codigo = this.codigo.find(resp => resp.codigo == value)
+    try {
+      this.selectedDescripcionSpan = codigo.descripcion; 
+      this.selectedUMSpan = codigo.um;
+      this.selectedCodigoSpan = value;
+    } catch { }
+    this.validaVacios();
+  }
+
+  borradoSpanCodigo(event: any) {
+    this.selectedCodigoSpan = "";
+    this.selectedDescripcionSpan = "";
   }
 
   selectZona() {
     this.precioPiso.getZona().subscribe(res => {
       this.zona = res;
     });
+  }
+
+  validaZona(e: any) {
+    this.validaVacios();
+  }
+
+
+  valuechange(newValue: any) {
+    this.validaVacios();
   }
 
   loader() {
@@ -89,17 +160,21 @@ export class DashboardComponent implements OnInit {
     }, 2000);
   }
 
+  loaderCheckbox(form: getDatosI) {
+    //ACTIVA LOADER
+    this.loader();
+    this.consultarDatos(form);
+  }
 
   consultarDatos(form: getDatosI) {
     this.precioPiso.getDatos(form).subscribe(res => {
 
-
       // COSTO PRECIO PISO
-      this.preciopisoGral = res.resultado.info.precioPiso;
-      this.pputilidadOperativaNeta = res.resultado.infoPropuesto.utilidadOperativaNeta;
+      this.preciopisoGral = (res.resultado.info.precioPiso).toFixed(2);
+      this.pputilidadOperativaNeta = (res.resultado.infoPropuesto.utilidadOperativaNeta).toFixed(2);
 
       // COSTO PRECIO PROPUESTO
-      this.pppreciopisoGral = res.resultado.infoPropuesto.precioPiso;
+      this.pppreciopisoGral = (res.resultado.infoPropuesto.precioPiso).toFixed(2);
 
       //GAUGE CHART
       this.chartPrecioPropuesto = this.pppreciopisoGral;
@@ -131,23 +206,42 @@ export class DashboardComponent implements OnInit {
       }
 
       //DIFERENCIA UTILIDAD PRECIO PROPUESTO VS PISO
-      this.difPrePropuestoVSPrePiso = res.resultado.graficaDto.precioPropuestoVPiso;
-      console.log(this.difPrePropuestoVSPrePiso);
-      
-      if( this.difPrePropuestoVSPrePiso >= 0){
+      this.difPrePropuestoVSPrePiso = (res.resultado.graficaDto.precioPropuestoVPiso).toFixed(2);
+
+      if (this.difPrePropuestoVSPrePiso >= 0) {
         (document.getElementById('difPrePropuestoVSPrePiso') as HTMLDivElement).style.color = "green";
-      }else{
+      } else {
         (document.getElementById('difPrePropuestoVSPrePiso') as HTMLDivElement).style.color = "red";
       }
 
-    }, (errorServicio) => {
-      console.log(errorServicio);
+    }, (error) => {
       Swal.fire(
-        'Intenta nuevamente',
-        'La consulta no fue validada',
+        '',
+        error.error.resultado,
         'error'
       )
+      this.limpiarCampos();
     })
+  }
 
+
+  limpiarCampos() {
+    (document.getElementById('utilidadNetaText') as HTMLDivElement).style.color = "#1e1d1d";
+    (document.getElementById('difPrePropuestoVSPrePiso') as HTMLDivElement).style.color = "#1e1d1d";
+    this.preciopisoGral = 0;
+
+    // UTILIDAD OPERATIVA NETA (GRAFICA)
+    this.utilidadNeta = '-';
+
+    //DIFERENCIA UTILIDAD
+    this.difPrePropuestoVSPrePiso = 0;
+
+    //GAUGE CHART
+    this.angulo = 90;
+    this.chartPrecioPropuesto = 0;
+    this.chartPrecioPiso = 0;
+    this.chartCostoVenta = 0;
+    this.chartGastoCryogenico = 0;
+    this.chartGastosVenta = 0;
   }
 }

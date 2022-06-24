@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col">
                 <img src="../../../assets/icons/icon-codigo.png" class="ms-3 icon"> Linea:
-                <input formControlName="linea" (change)="selectCodigo($event)" list="filterLinea" name="filterLinea" placeholder="Selecciona una Linea" style="width: 11vw;">
+                <input formControlName="linea" (change)="selectCodigo($event)" list="filterLinea" name="filterLinea" placeholder="Selecciona una Linea" style="width: 11vw;" id="linea" autocomplete="off">
                 <datalist id="filterLinea">
                     <option [value]="item.linea" *ngFor="let item of linea">
                         {{item.linea}} {{item.descripcion}}
@@ -13,7 +13,7 @@
             </div>
             <div class="col">
                 <img src="../../../assets/icons/icon-codigo.png" class="ms-3 icon"> Código:
-                <input formControlName="codigo" list="filterCodigo" name="filterCodigo" placeholder="Selecciona un código" style="width: 11vw;">
+                <input formControlName="codigo" (change)="selectedCodigo($event)" list="filterCodigo" name="filterCodigo" placeholder="Selecciona un código" (keydown)="borradoSpanCodigo($event)" style="width: 11vw;" id="codigo" autocomplete="off">
                 <datalist required id="filterCodigo">
                     <option [value]="item.codigo" *ngFor="let item of codigo">
                         {{item.codigo}} {{item.descripcion}}
@@ -22,7 +22,7 @@
             </div>
             <div class="col primeraColumna">
                 <img src="../../../assets/icons/icon-zona.png" class="icon"> Zona:
-                <input formControlName="zona" list="filterZona" name="filterZona" placeholder="Selecciona una Zona" style="width: 11vw;">
+                <input formControlName="zona" list="filterZona" name="filterZona" placeholder="Selecciona una Zona" id="zona" style="width: 11vw;" autocomplete="off" (change)="validaZona($event)">
                 <datalist required id="filterZona">
                     <option [value]="item.nombre" *ngFor="let item of zona">
                         {{item.area}} {{item.nombre}}
@@ -30,10 +30,10 @@
                 </datalist>
             </div>
             <div class="col">
-                <img src="../../../assets/icons/icon-precio.png" class="ms-4 icon-precio"> Precio propuesto <input type="number" formControlName="propuesto" required id="precioPropuesto">
+                <img src="../../../assets/icons/icon-precio.png" class="ms-4 icon-precio"> Precio propuesto <input type="number" formControlName="propuesto" id="precioPropuesto" required id="precioPropuesto" autocomplete="off">
             </div>
             <div class="col">
-                <img src="../../../assets/icons/icon-volumen.png" class="icon"> Volumen <input type="number" formControlName="volumen" required id="volumen"> u<sup>2</sup>
+                <img src="../../../assets/icons/icon-volumen.png" class="icon"> Volumen <input type="number" formControlName="volumen" required id="volumen" autocomplete="off" [ngModel]="mymodel" (ngModelChange)="valuechange($event)"><span id="selectedUMSpan"> {{selectedUMSpan}}</span>
             </div>
         </div>
         <div class="row">
@@ -41,13 +41,16 @@
                 <div class="ms-3 d-flex align-items-center">
                     <img src="../../../assets/img/cypto.png" class="icon-crypto"> Distribuye Cryoinfra
                     <label class="switch ms-4">
-                        <input type="checkbox" formControlName="tipoOperacion" id="cryoinfra">
+                        <input type="checkbox" formControlName="tipoOperacion" id="cryoinfra" (change)="loaderCheckbox(filterForm.value)" >
                         <span class="slider round" checked></span>
                     </label>
                 </div>
             </div>
+            <div class="col text-center d-flex align-items-center">
+                <span style="font-size: 0.8em;" id="codigoSpan">{{selectedCodigoSpan}} {{selectedDescripcionSpan}}</span>
+            </div>
             <div class="col col-btnSimulacion">
-                <button class="btn btn-primary simulacion me-4" type="submit" (click)="loader()" [disabled]="!filterForm.valid"><img src="../../../assets/icons/icon-ejecutar.png"><b>
+                <button class="btn btn-primary simulacion me-4" type="submit" id="simulacion" (click)="loader()" [disabled]="!filterForm.valid"><img src="../../../assets/icons/icon-ejecutar.png"><b>
                         Ejecutar</b> simulación </button>
             </div>
         </div>
@@ -66,10 +69,10 @@
                 </div>
                 <div class="col divisionDivs">
                     <div class="row division ">
-                        <p class="mt-3"><b>Precio piso</b></p>
+                        <p class="mt-3" style="color: #1F3569;"><b>Precio piso</b></p>
                     </div>
                     <div class="row mt-2">
-                        <p>$ {{chartPrecioPiso | number}}</p>
+                        <p>$ {{chartPrecioPiso | number : '1.2'}}</p>
                     </div>
                 </div>
             </div>
@@ -79,7 +82,7 @@
                 </div>
                 <div class="col divisionDivs">
                     <div class="row division ">
-                        <p class="mt-3"><b>Utilidad operativa neta</b></p>
+                        <p class="mt-3" style="color: #1F3569;"><b>Utilidad operativa neta</b></p>
                     </div>
                     <div class="row mt-2" id="utilidadNetaText">
                         <span><b>{{utilidadNeta}}</b></span>
@@ -94,16 +97,16 @@
                 <div class="col divisionDivs">
                     <div class="posible" style="z-index: 2; position: relative;">
                         <div class="row division ">
-                            <p class="mt-3"><b>Diferencia en utilidad precio propuesto v.s. piso</b></p>
+                            <p class="mt-3" style="color: #1F3569;"><b>Diferencia en utilidad precio propuesto v.s. piso</b></p>
                         </div>
                         <div class="row mt-2 " id="difPrePropuestoVSPrePiso">
-                            <p><b>$ {{difPrePropuestoVSPrePiso | number}}</b></p>
+                            <p><b>$ {{difPrePropuestoVSPrePiso | number : '1.2'}}</b></p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row costoOportunidad text-center" style="z-index: 1;">
-                <span style="font-size: 0.9em;">{{costoVariable}} </span>
+                <span style="font-size: 0.9em; color: #EF872F;">{{costoVariable}} </span>
             </div>
         </div>
 
@@ -125,7 +128,7 @@
                         <div class="gauge-meter" id="gauge-meter" style="transform: rotate(90deg)" [ngStyle]="{'transform': 'rotate(' + angulo + 'deg)'}">
                         </div>
                     </div>
-                    <p class="precioPiso"><span style="color: #2264a1;">$ {{chartPrecioPiso | number}}</span> <br> <span style="color: #04539E;">Precio piso</span></p>
+                    <p class="precioPiso"><span style="color: #2264a1;">$ {{chartPrecioPiso | number : '1.2'}}</span> <br> <span style="color: #04539E;">Precio piso</span></p>
                     <p class="utilidadOperativa"><span style="color: #575756;">Utilidad<br>operativa neta</span></p>
                     <p class="gastosVenta"><span style="color: #575756;">Gastos de venta y <br> administración</span></p>
                     <p class="gastosCryogénico"><span style="color: #575756;">Gastos cryogénico, <br> distribución y <br> depreciación</span></p>
@@ -133,7 +136,7 @@
                 </div>
             </div>
             <div class="row text-center precioPropuesto">
-                <span style="color: #04539E; font-size: 1em;">$ {{chartPrecioPropuesto | number}}</span>
+                <span style="color: #04539E; font-size: 1em;">$ {{chartPrecioPropuesto | number : '1.2'}}</span>
                 <span style="color: #04539E; font-size: 1em;">Precio propuesto</span>
             </div>
         </div>
