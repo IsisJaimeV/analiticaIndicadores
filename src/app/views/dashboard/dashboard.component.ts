@@ -133,8 +133,12 @@ export class DashboardComponent implements OnInit {
   }
 
   borradoSpanCodigo(event: any) {
-    this.selectedCodigoSpan = "";
+    
+    if(event.key != undefined){
+      this.selectedCodigoSpan = "";
     this.selectedDescripcionSpan = "";
+    }
+    
   }
 
   selectZona() {
