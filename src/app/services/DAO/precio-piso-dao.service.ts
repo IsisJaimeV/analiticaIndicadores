@@ -34,13 +34,29 @@ export class PrecioPisoDAOService {
     return this.http.get(environment.endp_zona, { 'headers': headers })
   }
 
-  getDatos(form: getDatosI): Observable<any> {
+  eliminarVacios(json: any) {
+    for (var clave in json) {
+        if (typeof json[clave] == 'string') {
+            if (json[clave] == 'Vacío' || json[clave] == '') {
+                delete json[clave]
+            }
+        } else if (typeof json[clave] == 'object') {
+            this.eliminarVacios(json[clave])
+        }
+    }
+}
+
+  getDatos(form: Object): Observable<any> {
     const headers = {
       'Content-Type': 'application/json; charset=utf-8',
       'Ocp-Apim-Subscription-Key': 'd788385e2e7349388f922cd2158dbf7c'
     }
     const body = JSON.stringify(form);
+    const json = JSON.parse(body);
 
-    return this.http.post(environment.endp_precioPiso, body, { 'headers': headers })
+    this.eliminarVacios(json);
+    console.log(json)
+
+    return this.http.post(environment.endp_precioPiso, json, { 'headers': headers })
   }
 }
