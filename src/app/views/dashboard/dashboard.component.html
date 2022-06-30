@@ -78,18 +78,30 @@
             </div>
             <div class="row mt-3 indicadoresDivs ms-4 me-4">
                 <div class="col-md-3 text-center">
+                    <img src="../../../assets/icons/icon-utilidadPrecio.png" class="mt-4 iconDiv">
+                </div>
+                <div class="col divisionDivs">
+                    <div class="row division ">
+                        <p class="mt-3" style="color: #1F3569;"><b>Margen operativo precio piso</b></p>
+                    </div>
+                    <div class="row mt-2">
+                        <span><b>{{utilidadPrecioPiso | number : '1.1'}} %</b></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3 indicadoresDivs ms-4 me-4">
+                <div class="col-md-3 text-center">
                     <img src="../../../assets/icons/icon-utilidad.png" class="mt-4 iconDiv">
                 </div>
                 <div class="col divisionDivs">
                     <div class="row division ">
-                        <p class="mt-3" style="color: #1F3569;"><b>Utilidad operativa neta</b></p>
+                        <p class="mt-3" style="color: #1F3569;"><b>Utilidad operativa neta precio propuesto</b></p>
                     </div>
                     <div class="row mt-2" id="utilidadNetaText">
                         <span><b>{{utilidadNeta}}</b></span>
                     </div>
                 </div>
             </div>
-
             <div class="row mt-3 indicadoresDivs ms-4 me-4 mb-5">
                 <div class="col-md-3 text-center">
                     <img src="../../../assets/icons/icon-diferencia.png" class="mt-4 iconDiv">
@@ -112,14 +124,14 @@
 
         <div class="col resultados ms-1 mt-5 mb-4 me-5">
             <div class="row tituloResultados ">
-                <div class="ms-5 mt-3 " style="font-size: 1.1em; color: #1F3569; font-family: Roboto-Semibold;">
+                <div class="ms-5 mt-5 " style="font-size: 1.1em; color: #1F3569; font-family: Roboto-Semibold;">
                     <i class="fa fa-bar-chart me-2 mt-4"></i>
                     <span>Gráfica </span>
                     <span style="color: #EF872F; ">Resultados</span>
                 </div>
             </div>
             <div class="row mt-5 text-center chart">
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center mt-5">
                     <div class="gauge-wraper">
                         <div class="gauge" data-value="123L">
                             <div class="range first-half"></div>

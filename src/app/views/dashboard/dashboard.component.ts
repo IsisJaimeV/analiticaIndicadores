@@ -14,6 +14,7 @@ export class DashboardComponent implements OnInit {
 
   // COSTO PRECIO PISO
   preciopisoGral: any = 0;
+  utilidadPrecioPiso: any = 0;
 
   // COSTO PRECIO PROPUESTO
   pppreciopisoGral: any = 0;
@@ -115,6 +116,7 @@ export class DashboardComponent implements OnInit {
     this.selectedUMSpan = "";
     this.selectedCodigoSpan = "";
     this.selectedDescripcionSpan = "";
+    this.utilidadPrecioPiso = 0;
 
     this.validaVacios();
     this.limpiarCampos()
@@ -186,20 +188,23 @@ export class DashboardComponent implements OnInit {
 
       const colorAngulo = res.resultado.graficaDto.color;
       if (colorAngulo == 0) { // 0 ->Error de calculo
-        this.angulo = -5;
+        this.angulo = 2;
       } if (colorAngulo == 1) { // 1 ->Verde
-        this.angulo = 170;
+        this.angulo = 160;
       } if (colorAngulo == 2) { // 2 ->Rojo
-        this.angulo = 10;
+        this.angulo = 20;
       } if (colorAngulo == 3) { // 3 ->Amarillo
-        this.angulo = 120;
+        this.angulo = 110;
       } if (colorAngulo == 4) { // 4 ->Naranja
-        this.angulo = 60;
+        this.angulo = 70;
       }
 
       this.costoVariable = res.resultado.graficaDto.analisisOportunidad;
 
-      //UTILIDAD OPERATIVA NETA
+      //UTILIDAD OPERATIVA NETA PRECIO PISO
+      this.utilidadPrecioPiso = (res.resultado.porcentajePrecioPiso.utilidadOperativaNeta).toFixed(1);
+
+      //UTILIDAD OPERATIVA NETA PRECIO PROPUESTO
       const utilidad = this.pputilidadOperativaNeta;
       if (utilidad >= 0) {
         this.utilidadNeta = 'Positiva "Creación de Valor"';
