@@ -39,7 +39,7 @@ export class LoadingComponent implements OnInit {
     var pathJSON = {
       correo: decodeURIComponent(correo),
       token: decodeURIComponent(token),
-      sourceId: 1
+      sourceId: 2
     }
 
     localStorage.setItem("user", "")
