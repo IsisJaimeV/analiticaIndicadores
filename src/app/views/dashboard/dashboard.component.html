@@ -22,12 +22,11 @@
             </div>
             <div class="col primeraColumna">
                 <img src="../../../assets/icons/icon-zona.png" class="icon"> Zona:
-                <input formControlName="zona" list="filterZona" name="filterZona" placeholder="Selecciona una Zona" id="zona" style="width: 11vw;" autocomplete="off" (change)="validaZona($event)">
-                <datalist required id="filterZona">
+                <select formControlName="zona" list="filterZona" name="filterZona" placeholder="Selecciona una Zona" id="zona" style="width: 11vw;" autocomplete="off" (change)="validaZona($event)">
                     <option [value]="item.nombre" *ngFor="let item of zona">
                         {{item.area}} {{item.nombre}}
                     </option>
-                </datalist>
+                </select>
             </div>
             <div class="col">
                 <img src="../../../assets/icons/icon-precio.png" class="ms-4 icon-precio"> Precio propuesto <input type="number" formControlName="propuesto" id="precioPropuesto" id="precioPropuesto" autocomplete="off">
@@ -155,5 +154,5 @@
     </div>
 </div>
 <ngx-spinner type="ball-scale-multiple">
-    <p style="color: white"> Calculando datos... </p>
+    <p style="color: white"></p>
 </ngx-spinner>
