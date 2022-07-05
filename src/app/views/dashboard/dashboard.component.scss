@@ -19,6 +19,10 @@
     }
 }
 
+.icon-grafica {
+    width: 3% !important;
+}
+
 .gauge {
     width: 60%;
     margin: 0 auto;
@@ -378,6 +382,9 @@ input:checked+.slider:before {
     }
     .col-btnSimulacion {
         padding: 3vh !important;
+        .simulacion {
+            width: 40%;
+        }
     }
     .simulacion {
         margin-top: -20px;
@@ -404,6 +411,12 @@ input:checked+.slider:before {
 }
 
 @media (max-width:540px) {
+    .icon-grafica {
+        width: 6% !important;
+    }
+    .chart {
+        padding-top: 0px !important;
+    }
     .resultados {
         margin-left: 20px;
     }

@@ -23,6 +23,7 @@
             <div class="col primeraColumna">
                 <img src="../../../assets/icons/icon-zona.png" class="icon"> Zona:
                 <select formControlName="zona" list="filterZona" name="filterZona" placeholder="Selecciona una Zona" id="zona" style="width: 11vw;" autocomplete="off" (change)="validaZona($event)">
+                    <option value="" disabled selected hidden>Selecciona una Zona</option>
                     <option [value]="item.nombre" *ngFor="let item of zona">
                         {{item.area}} {{item.nombre}}
                     </option>
@@ -38,7 +39,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="ms-3 d-flex align-items-center">
-                    <img src="../../../assets/img/cypto.png" class="icon-crypto"> Distribuye Cryoinfra
+                    <img src="../../../assets/img/crypto.png" class="icon-crypto"> Distribuye Cryoinfra
                     <label class="switch ms-4">
                         <input type="checkbox" formControlName="tipoOperacion" id="cryoinfra" (change)="loaderCheckbox(filterForm.value)" >
                         <span class="slider round" checked></span>
@@ -124,8 +125,8 @@
         <div class="col resultados ms-1 mt-5 mb-4 me-5">
             <div class="row tituloResultados ">
                 <div class="ms-5 mt-5 " style="font-size: 1.1em; color: #1F3569; font-family: Roboto-Semibold;">
-                    <i class="fa fa-bar-chart me-2 mt-4"></i>
-                    <span>Gráfica </span>
+                    <img src="../../../assets/icons/icon-grafica.png" class="me-2 icon-grafica">
+                    <span>  Gráfica </span>
                     <span style="color: #EF872F; ">Resultados</span>
                 </div>
             </div>
