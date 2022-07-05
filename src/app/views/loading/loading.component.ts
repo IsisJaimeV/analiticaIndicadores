@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class LoadingComponent implements OnInit {
 
   user: ResponseI[] = [];
+  loading: boolean = false;
   constructor(private router: Router, private precioPiso: PrecioPisoDAOService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
@@ -42,6 +43,7 @@ export class LoadingComponent implements OnInit {
       sourceId: 2
     }
 
+    this.loading = true;
     localStorage.setItem("user", "")
     this.precioPiso.getAuth(pathJSON).subscribe(res => {
       if (res.resultado == true) {
@@ -50,10 +52,13 @@ export class LoadingComponent implements OnInit {
       } else {
         this.router.navigate(['not-found']);
       }
+      this.loading = false;
     }, (error) => {
+      console.log(error);
+      this.loading = false;
       this.router.navigate(['not-found']);
     })
-    
+
     return this.user;
   }
 }
