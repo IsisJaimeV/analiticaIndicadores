@@ -215,6 +215,9 @@
 .container-fluid {
     width: 100vw;
     overflow-x: hidden;
+    .filterInputSpan {
+        font-size: 0.8em !important;
+    }
     .row {
         font-family: Roboto-Regular;
         color: #575756;
@@ -260,8 +263,7 @@
                 border-color: #fff transparent transparent transparent;
             }
         }
-        .primeraColumna,
-        .col-md-3 {
+        .primeraColumna {
             border-right: 0.5px dashed #ACACA5;
         }
     }

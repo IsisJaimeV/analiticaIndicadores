@@ -5,6 +5,7 @@ import { PrecioPisoDAOService } from 'src/app/services/DAO/precio-piso-dao.servi
 import { getDatosI } from 'src/app/models/getDatos.interface';
 import Swal from 'sweetalert2'
 
+declare var $: any;
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -35,6 +36,12 @@ export class DashboardComponent implements OnInit {
   chartGastoCryogenico: any = 0;
   chartGastosVenta: any = 0;
 
+  //NEGATIVOS SPAN
+  spanchartPrecioPiso: string = "$";
+  spandifPrePropuestoVSPrePiso: string = "$";
+  spanchartPrecioPropuesto: string = "$";
+  spanSimbolchartPrecioPiso: string = "$";
+
   // SELECT FILTER
   linea: any[] = [];
   zona: any[] = [];
@@ -59,7 +66,7 @@ export class DashboardComponent implements OnInit {
     tipoOperacion: new FormControl(false, Validators.nullValidator),
   })
 
-  mymodel:any;
+  mymodel: any;
   correo: any = "";
 
   constructor(private precioPiso: PrecioPisoDAOService, private spinner: NgxSpinnerService) { }
@@ -67,6 +74,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.selectLinea();
     this.selectZona();
+    this.separadorMiles();
   }
 
   validaVacios() {
@@ -129,7 +137,7 @@ export class DashboardComponent implements OnInit {
 
     var codigo = this.codigo.find(resp => resp.codigo == value)
     try {
-      this.selectedDescripcionSpan = codigo.descripcion; 
+      this.selectedDescripcionSpan = codigo.descripcion;
       this.selectedUMSpan = codigo.um;
       this.selectedCodigoSpan = value;
     } catch { }
@@ -137,12 +145,12 @@ export class DashboardComponent implements OnInit {
   }
 
   borradoSpanCodigo(event: any) {
-    
-    if(event.key != undefined){
+
+    if (event.key != undefined) {
       this.selectedCodigoSpan = "";
-    this.selectedDescripcionSpan = "";
+      this.selectedDescripcionSpan = "";
     }
-    
+
   }
 
   selectZona() {
@@ -154,9 +162,24 @@ export class DashboardComponent implements OnInit {
       this.zona = res;
       (document.getElementById("zona") as HTMLSelectElement).disabled = false;
       (document.getElementById("zona") as HTMLSelectElement).style.backgroundColor = "#F2F2F2";
-    
+
     });
 
+  }
+
+  separadorMiles() {
+    $("#volumen").on({
+      "focus": function (event: { target: any; }) {
+        $(event.target).select();
+      },
+      "keyup": function (event: { target: any; }) {
+        $(event.target).val(function (index: any, value: string) {
+          return value.replace(/\D/g, "")
+            .replace(/([0-9])([0-9]{0})$/, '$1')
+            .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+        });
+      }
+    });
   }
 
   validaZona(e: any) {
@@ -214,23 +237,53 @@ export class DashboardComponent implements OnInit {
       //UTILIDAD OPERATIVA NETA PRECIO PISO
       this.utilidadPrecioPiso = (res.resultado.porcentajePrecioPiso.utilidadOperativaNeta).toFixed(1);
 
-      //UTILIDAD OPERATIVA NETA PRECIO PROPUESTO
+      //UTILIDAD OPERATIVA NETA
       const utilidad = this.pputilidadOperativaNeta;
-      if (utilidad >= 0) {
+      if (utilidad >= 1) {
         this.utilidadNeta = 'Positiva "Creación de Valor"';
-        (document.getElementById('utilidadNetaText') as HTMLDivElement).style.color = "green";
-      } else {
+        $('#utilidadNetaText').css('color', 'green');
+      } if (utilidad > 0 && utilidad < 1) {
+        this.utilidadNeta = 'Sin Creación de Valor';
+        $('#utilidadNetaText').css('color', 'blue');
+      } if (utilidad <= 0) {
         this.utilidadNeta = 'Negativa "Destrucción de Valor"';
-        (document.getElementById('utilidadNetaText') as HTMLDivElement).style.color = "red";
+        $('#utilidadNetaText').css('color', 'red');
       }
 
       //DIFERENCIA UTILIDAD PRECIO PROPUESTO VS PISO
-      this.difPrePropuestoVSPrePiso = (res.resultado.graficaDto.precioPropuestoVPiso).toFixed(2);
+      this.difPrePropuestoVSPrePiso = (res.resultado.graficaDto.precioPropuestoVPiso).toFixed(0);
 
       if (this.difPrePropuestoVSPrePiso >= 0) {
         (document.getElementById('difPrePropuestoVSPrePiso') as HTMLDivElement).style.color = "green";
       } else {
         (document.getElementById('difPrePropuestoVSPrePiso') as HTMLDivElement).style.color = "red";
+      }
+
+
+      //NEGATIVE SPAN SIMBOLO
+      if (this.chartPrecioPiso < 0) {
+        this.spanchartPrecioPiso = "-$";
+        this.chartPrecioPiso = this.chartPrecioPiso * -1;
+      } else if (this.chartPrecioPiso >= 0) {
+        this.spanchartPrecioPiso = "$";
+
+      } if (this.difPrePropuestoVSPrePiso < 0) {
+        this.spandifPrePropuestoVSPrePiso = "-$";
+        this.difPrePropuestoVSPrePiso = this.difPrePropuestoVSPrePiso * -1;
+      } else if (this.difPrePropuestoVSPrePiso >= 0) {
+        this.spandifPrePropuestoVSPrePiso = "$";
+
+      } if (this.chartPrecioPropuesto < 0) {
+        this.spanchartPrecioPropuesto = "-$";
+        this.chartPrecioPropuesto = this.chartPrecioPropuesto * -1;
+      } else if (this.chartPrecioPropuesto >= 0) {
+        this.spanchartPrecioPropuesto = "$";
+
+      } if (this.chartPrecioPiso < 0) {
+        this.spanSimbolchartPrecioPiso = "-$";
+        this.chartPrecioPiso = this.chartPrecioPiso * -1;
+      } else if (this.chartPrecioPiso >= 0) {
+        this.spanSimbolchartPrecioPiso = "$";
       }
 
     }, (error) => {
@@ -262,5 +315,13 @@ export class DashboardComponent implements OnInit {
     this.chartCostoVenta = 0;
     this.chartGastoCryogenico = 0;
     this.chartGastosVenta = 0;
+
+    //NEGATIVE SIMBOL
+    this.spanchartPrecioPiso = "$";
+    this.spandifPrePropuestoVSPrePiso = "$";
+    this.spanchartPrecioPropuesto = "$";
+    this.spanSimbolchartPrecioPiso = "$";
+
+
   }
 }

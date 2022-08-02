@@ -1,10 +1,10 @@
 <app-header></app-header>
 <div class="container-fluid">
     <form [formGroup]="filterForm" (ngSubmit)="consultarDatos(filterForm.value)">
-        <div class="row">
+        <div class="row filterInputSpan">
             <div class="col">
-                <img src="../../../assets/icons/icon-codigo.png" class="ms-3 icon"> Linea:
-                <input formControlName="linea" (change)="selectCodigo($event)" list="filterLinea" name="filterLinea" placeholder="Selecciona una Linea" style="width: 11vw;" id="linea" autocomplete="off">
+                <img src="../../../assets/icons/icon-lineaAgrupa.png" class="ms-3 icon"> <span style="font-size: 0.9em;">Linea agrupa: </span>
+                <input formControlName="linea" (change)="selectCodigo($event)" list="filterLinea" name="filterLinea" placeholder="Selecciona una Linea" style="width: 35%" id="linea" autocomplete="off">
                 <datalist id="filterLinea">
                     <option [value]="item.linea" *ngFor="let item of linea">
                         {{item.linea}} {{item.descripcion}}
@@ -12,7 +12,7 @@
                 </datalist>
             </div>
             <div class="col">
-                <img src="../../../assets/icons/icon-codigo.png" class="ms-3 icon"> Código:
+                <img src="../../../assets/icons/icon-codigo.png" class="icon"> <span style="font-size: 0.9em;">Código: </span>
                 <input formControlName="codigo" (change)="selectedCodigo($event)" list="filterCodigo" name="filterCodigo" placeholder="Selecciona un código" (keydown)="borradoSpanCodigo($event)" style="width: 11vw;" id="codigo" autocomplete="off">
                 <datalist required id="filterCodigo">
                     <option [value]="item.codigo" *ngFor="let item of codigo">
@@ -21,25 +21,27 @@
                 </datalist>
             </div>
             <div class="col primeraColumna">
-                <img src="../../../assets/icons/icon-zona.png" class="icon"> Zona:
+                <img src="../../../assets/icons/icon-zona.png" class="icon"> <span style="font-size: 0.9em;">Zona: </span>
                 <select formControlName="zona" list="filterZona" name="filterZona" placeholder="Selecciona una Zona" id="zona" style="width: 11vw;" autocomplete="off" (change)="validaZona($event)">
                     <option value="" disabled selected hidden>Selecciona una Zona</option>
                     <option [value]="item.nombre" *ngFor="let item of zona">
-                        {{item.area}} {{item.nombre}}
+                        {{item.idZona}} {{item.nombre}}
                     </option>
                 </select>
             </div>
             <div class="col">
-                <img src="../../../assets/icons/icon-precio.png" class="ms-4 icon-precio"> Precio propuesto <input type="number" formControlName="propuesto" id="precioPropuesto" id="precioPropuesto" autocomplete="off">
+                <img src="../../../assets/icons/icon-precio.png" class="icon-precio"><span style="font-size: 0.9em;">Precio propuesto </span><span style="font-size: 0.6em;">(MXN) </span> <input type="text" currencyMask [options]="{ prefix: '',   allowNegative: false }"
+                    formControlName="propuesto" id="precioPropuesto" id="precioPropuesto" autocomplete="off">
             </div>
             <div class="col">
-                <img src="../../../assets/icons/icon-volumen.png" class="icon"> Volumen <input type="number" formControlName="volumen" required id="volumen" autocomplete="off" [ngModel]="mymodel" (ngModelChange)="valuechange($event)"><span id="selectedUMSpan"> {{selectedUMSpan}}</span>
+                <img src="../../../assets/icons/icon-volumen.png" class="icon"><span style="font-size: 0.9em;">Volumen anual </span> <input type="text" formControlName="volumen" required id="volumen" autocomplete="off" [ngModel]="mymodel" (ngModelChange)="valuechange($event)">
+                <span id="selectedUMSpan"> {{selectedUMSpan}}</span>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 primeraColumna">
                 <div class="ms-3 d-flex align-items-center">
-                    <img src="../../../assets/img/crypto.png" class="icon-crypto"> Distribuye Cryoinfra
+                    <img src="../../../assets/img/crypto.png" class="icon-crypto"><span style="font-size: 0.9em;">Distribuye Cryoinfra</span>
                     <label class="switch ms-4">
                         <input type="checkbox" formControlName="tipoOperacion" id="cryoinfra" (change)="loaderCheckbox(filterForm.value)" >
                         <span class="slider round" checked></span>
@@ -72,7 +74,7 @@
                         <p class="mt-3" style="color: #1F3569;"><b>Precio piso</b></p>
                     </div>
                     <div class="row mt-2">
-                        <p>$ {{chartPrecioPiso | number : '1.2'}}</p>
+                        <p>{{spanchartPrecioPiso}} {{chartPrecioPiso | number : '1.2'}}</p>
                     </div>
                 </div>
             </div>
@@ -109,10 +111,10 @@
                 <div class="col divisionDivs">
                     <div class="posible" style="z-index: 2; position: relative;">
                         <div class="row division ">
-                            <p class="mt-3" style="color: #1F3569;"><b>Diferencia en utilidad precio propuesto v.s. piso</b></p>
+                            <p class="mt-3" style="color: #1F3569;"><b>Diferencia en utilidad precio propuesto vs piso</b></p>
                         </div>
                         <div class="row mt-2 " id="difPrePropuestoVSPrePiso">
-                            <p><b>$ {{difPrePropuestoVSPrePiso | number : '1.2'}}</b></p>
+                            <p><b>{{spandifPrePropuestoVSPrePiso}} {{difPrePropuestoVSPrePiso | number}}</b></p>
                         </div>
                     </div>
                 </div>
@@ -140,7 +142,7 @@
                         <div class="gauge-meter" id="gauge-meter" style="transform: rotate(90deg)" [ngStyle]="{'transform': 'rotate(' + angulo + 'deg)'}">
                         </div>
                     </div>
-                    <p class="precioPiso"><span style="color: #2264a1;">$ {{chartPrecioPiso | number : '1.2'}}</span> <br> <span style="color: #04539E;">Precio piso</span></p>
+                    <p class="precioPiso"><span style="color: #2264a1;">{{spanSimbolchartPrecioPiso}} {{chartPrecioPiso | number : '1.2'}}</span> <br> <span style="color: #04539E;">Precio piso</span></p>
                     <p class="utilidadOperativa"><span style="color: #575756;">Utilidad<br>operativa neta</span></p>
                     <p class="gastosVenta"><span style="color: #575756;">Gastos de venta y <br> administración</span></p>
                     <p class="gastosCryogénico"><span style="color: #575756;">Gastos cryogénico, <br> distribución y <br> depreciación</span></p>
@@ -148,7 +150,7 @@
                 </div>
             </div>
             <div class="row text-center precioPropuesto">
-                <span style="color: #04539E; font-size: 1em;">$ {{chartPrecioPropuesto | number : '1.2'}}</span>
+                <span style="color: #04539E; font-size: 1em;">{{spanchartPrecioPropuesto}} {{chartPrecioPropuesto | number : '1.2'}}</span>
                 <span style="color: #04539E; font-size: 1em;">Precio propuesto</span>
             </div>
         </div>

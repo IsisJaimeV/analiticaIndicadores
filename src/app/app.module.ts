@@ -12,7 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { LoadingComponent } from './views/loading/loading.component';  
-
+import { NgxCurrencyModule } from 'ngx-currency';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +31,7 @@ import { LoadingComponent } from './views/loading/loading.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     NgxSpinnerModule ,
+    NgxCurrencyModule
   ],
   providers: [],
   bootstrap: [AppComponent]
